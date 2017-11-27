@@ -1,6 +1,3 @@
-import random
-
-
 def make_grid(x, y):
     """
     :param x: integer - number of columns - in this game, will always be 3
@@ -24,40 +21,48 @@ def print_grid(grid):
         print string
 
 
-def check_lines(grid):
+def check_winner(grid):
     """
-    :param grid:
-    :return: True if there is a full line
+    :param grid:  a dict of coords representing a tic tac toe board
+    :return: True if there is a full line, False, if there isn't
     """
-    result = False
 
-    #     If there is a not empty, check if can make a line
+    # Check horizontal
+    for i in range(3):
+        if grid[(i,0)] != " " and grid[(i,0)] == grid[(i,1)] and grid[(i,1)] == grid[(i,2)]:
+            if grid[(i,0)] == "X":
+                print "Player 1, you won"
+                return True
+            else:
+                print "Player 2, you won"
+                return True
 
-    #     Make a line:
-    #         - all of the same row
-    #         - all of the same column
-    #         - diagonal
+    for j in range(3):
+        if grid[(0, j)] != " " and grid[(0, j)] == grid[(1, j)] and grid[(1, j)] == grid[(2 , j)]:
+            if grid[(0, j)] == "X":
+                print "Player 1, you won"
+                return True
+            else:
+                print "Player 2, you won"
+                return True
 
-    # # Check horizontal
-    #     for i in range(3):
-    #         if grid[(i,0)] != 0 and grid[(i,0)] == grid[(i, 1)] and grid[(i, 1)] == grid[(i,2)]:
-    #             return True
-    #             break
-    #
-    # # Check vertical
-    #     for j in range(3):
-    #         if grid[(0, j)] != 0 and grid[(0, j)] == grid[(1, j)] and grid[(1, j)] == grid[(2, j)]:
-    #             return True
-    #             break
-    #
-    # # Check diagonal
-    #     if grid[(0, 0)] != 0 and grid[(1, )] == grid[(1, j)] and grid[(1, j)] == grid[(2, j)]:
-    #         return True
-    #         break
+    if grid[(0, 0)] != " " and grid[(0, 0)] == grid[(1, 1)] and grid[(1, 1)] == grid[(2 , 2)]:
+        if grid[(0, j)] == "X":
+            print "Player 1, you won"
+            return True
+        else:
+            print "Player 2, you won"
+            return True
 
+    if grid[(0, 2)] != " " and grid[(0, 2)] == grid[(1, 1)] and grid[(1, 1)] == grid[(2, 0)]:
+        if grid[(0, j)] == "X":
+            print "Player 1, you won"
+            return True
+        else:
+            print "Player 2, you won"
+            return True
 
-    return all_lines
-
+    return False
 
 def update_grid(grid, played_position, player):
     """
@@ -89,13 +94,21 @@ def get_valid_positions(grid):
 def play(player):
     while True:
         print "%s, it's your turn"%player
-        c = int(raw_input("%s, what column do you play?" % player))
-        r = int(raw_input("%s, what column do you play?"%player))
-        if c in range(3) and r in range(3) and (c, r) in get_valid_positions(grid):
-            update_grid(grid, (c, r), player)
-            print "%s has played, here is the new board:"%player
-            print_grid(grid)
-            break;
+        try:
+            x = int(raw_input("%s, what row do you play?" % player))
+            y = int(raw_input("%s, what column do you play?"%player))
+        except:
+            print "Please enter an integer"
+        else:
+            if x in range(3) and y in range(3) and (x, y) in get_valid_positions(grid):
+                update_grid(grid, (x, y), player)
+                print "%s has played, here is the new board:"%player
+                print_grid(grid)
+                break
+            elif x not in range(3) or y not in range(3):
+                print "You must enter an integer between 0 and 2 - 0 is the first column and 2 is the 3rd"
+            else:
+                print "This is not a valid position"
 
 
 if __name__ == '__main__':
@@ -105,4 +118,11 @@ if __name__ == '__main__':
 
     while True:
         play("Player 1")
-        break
+
+        if check_winner(grid):
+            break
+
+        play("Player 2")
+
+        if check_winner(grid):
+            break
