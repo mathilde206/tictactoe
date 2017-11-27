@@ -1,5 +1,5 @@
 import unittest
-from tictactoe import make_grid, update_grid, is_position_valid
+from tictactoe import make_grid, update_grid, is_position_valid, get_valid_positions
 
 class TestTictactoe(unittest.TestCase):
 
@@ -41,5 +41,7 @@ class TestTictactoe(unittest.TestCase):
         self.assertFalse(is_position_valid(grid, (0,0)))
         self.assertTrue(is_position_valid(grid, (1,1)))
 
-
-    
+    def test_get_valid_positions(self):
+        grid = make_grid(3, 3)
+        update_grid(grid, (0, 0), "U")
+        self.assertEquals(len(get_valid_positions(grid)), 8)
