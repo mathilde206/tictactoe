@@ -1,3 +1,5 @@
+import random
+
 def make_grid(x, y):
     """
     :param x: integer - number of columns - in this game, will always be 3
@@ -34,7 +36,7 @@ def check_winner(grid):
                 print "Player 1, you won"
                 return True
             else:
-                print "Player 2, you won"
+                print "Computer, you won"
                 return True
 
     for j in range(3):
@@ -43,23 +45,23 @@ def check_winner(grid):
                 print "Player 1, you won"
                 return True
             else:
-                print "Player 2, you won"
+                print "Computer, you won"
                 return True
 
     if grid[(0, 0)] != " " and grid[(0, 0)] == grid[(1, 1)] and grid[(1, 1)] == grid[(2 , 2)]:
-        if grid[(0, j)] == "X":
+        if grid[(0, 0)] == "X":
             print "Player 1, you won"
             return True
         else:
-            print "Player 2, you won"
+            print "Computer, you won"
             return True
 
     if grid[(0, 2)] != " " and grid[(0, 2)] == grid[(1, 1)] and grid[(1, 1)] == grid[(2, 0)]:
-        if grid[(0, j)] == "X":
+        if grid[(0, 2)] == "X":
             print "Player 1, you won"
             return True
         else:
-            print "Player 2, you won"
+            print "Computer, you won"
             return True
 
     return False
@@ -110,6 +112,17 @@ def play(player):
             else:
                 print "This is not a valid position"
 
+def computer_play(valid_pos):
+    """
+    :param valid_pos: gets an array of available positions
+    :return:
+    """
+    i = random.randint(0, len(valid_pos)-1)
+    update_grid(grid, valid_pos[i], "Computer")
+    print "Computer has played, here is the new board:"
+    print_grid(grid)
+
+
 
 if __name__ == '__main__':
     grid = make_grid(3,3)
@@ -122,7 +135,8 @@ if __name__ == '__main__':
         if check_winner(grid):
             break
 
-        play("Player 2")
+        valid_pos = get_valid_positions(grid)
+        computer_play(valid_pos)
 
         if check_winner(grid):
             break
